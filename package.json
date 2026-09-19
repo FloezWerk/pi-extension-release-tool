@@ -1,6 +1,6 @@
 {
   "name": "@floez-werk/pi-extension-release-tool",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Release tooling for FloezWerk pi extensions: scaffolding, README release-notes sync, GitHub release notes and the shared CI/CD workflows.",
   "license": "MIT",
   "author": "FloezWerk",

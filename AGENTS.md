@@ -52,12 +52,14 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
 2. Bump `"version"` in `package.json`, run `npm run readme`, commit both
 3. `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin main vX.Y.Z`
    -> Gitea mirrors the tag -> `release.yml` (local caller of the reusable
-   workflow) publishes to npm, creates the GitHub release from the CHANGELOG
-   section and moves the `vX.Y` tag
-4. The extensions consume the `vX.Y` tag (reusable workflows) and `^X.Y` (npm
-   scripts) - a patch release reaches them automatically, a **minor** release
+   workflow) publishes to npm and creates the GitHub release from the CHANGELOG
+   section
+4. Move the moving tag locally, so Gitea stays the only source of refs:
+   `npm run tag-major` (`vX.Y` -> this release, mirrored to GitHub)
+5. The extensions consume the `vX.Y` tag (reusable workflows) and `^X.Y` (npm
+   scripts) - a patch release reaches them after step 4, a **minor** release
    is a deliberate update of their pins (see README)
-5. First release of the package only: publish manually (`npm login`,
+6. First release of the package only: publish manually (`npm login`,
    `npm publish --access public`), then set the GitHub secret `NPM_TOKEN`, and
    do **not** push the tag of that version
 

@@ -3,7 +3,8 @@ name: Release
 # Triggered by pushing a version tag (vX.Y.Z). Gitea mirrors the tag to GitHub,
 # where this workflow calls the shared release pipeline: guards, `npm run check`,
 # README release-notes sync, npm publish (with provenance), tarball and GitHub
-# release, plus moving the vX.Y tag. Publishing happens here and only here.
+# release. Publishing happens here and only here; tags are never created here
+# (Gitea is the source of truth for refs and mirrors them to GitHub).
 on:
   push:
     tags:

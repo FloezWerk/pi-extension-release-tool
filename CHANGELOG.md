@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-09-19
+
+### Changed
+
+- The release workflow no longer creates tags: the moving `vX.Y` tag is moved
+  locally with `npm run tag-major` and mirrored from Gitea, so Gitea stays the
+  single source of truth for refs (a workflow-set tag existed on GitHub only).
+  `reusable-release.yml` therefore lost the `move_major_tag` input.
+
 ## [0.1.0] - 2026-09-19
 
 ### Added
@@ -27,9 +36,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README with the step-by-step guide for a new extension repository (Gitea,
   GitHub mirror, npm, first release)
 
-<!-- [Unreleased] compares against the last tagged version; switch this link to
-     compare/vX.Y.Z...HEAD once the first version is tagged. Versions link to
-     their GitHub release page (created by release.yml); 0.1.0 has no tag yet
-     (the first publish is manual), so it links to npm. -->
-[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/commits/main
+<!-- [Unreleased] compares against the last tagged version. Versions link to
+     their GitHub release page (created by release.yml); 0.1.0 has no tag
+     (the first publish was manual), so it links to npm. -->
+[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.1
 [0.1.0]: https://www.npmjs.com/package/@floez-werk/pi-extension-release-tool/v/0.1.0

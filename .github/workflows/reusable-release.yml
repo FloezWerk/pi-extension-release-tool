@@ -1,8 +1,12 @@
 name: Release (reusable)
 
 # Shared release pipeline for the FloezWerk pi extensions: guards, checks,
-# README release-notes sync, npm publish with provenance, GitHub release with
-# the CHANGELOG section as body, and the moving major.minor tag.
+# README release-notes sync, npm publish with provenance and the GitHub release
+# with the CHANGELOG section as body.
+#
+# Tags are never created here: Gitea is the single source of truth for refs and
+# mirrors them to GitHub. The moving "vX.Y" tag is moved locally with
+# `npm run tag-major` (see AGENTS.md).
 #
 # Called by a repository's thin `release.yml` on a version tag push (see
 # `template/.github/workflows/release.yml`).
@@ -17,10 +21,6 @@ on:
         description: Node.js version used for the release
         type: string
         default: "22"
-      move_major_tag:
-        description: Move the moving "v<major>.<minor>" tag to this release
-        type: boolean
-        default: true
     secrets:
       npm_token:
         description: npm automation token with publish rights for the package
@@ -30,7 +30,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # create the GitHub release and move the vX.Y tag
+      contents: write   # create the GitHub release
       id-token: write   # npm provenance (OIDC)
     steps:
       - name: Checkout
@@ -99,14 +99,3 @@ jobs:
         with:
           files: '*.tgz'
           body_path: /tmp/release-notes.md
-
-      # Moving major.minor tag: repositories pin "@vX.Y" for the reusable
-      # workflows, so patches reach them automatically while a minor bump stays
-      # a deliberate update of the caller.
-      - name: Move the major.minor tag
-        if: ${{ inputs.move_major_tag }}
-        run: |
-          MOVE="v$(node -p "require('./package.json').version.split('.').slice(0,2).join('.')")"
-          echo "Moving $MOVE to ${GITHUB_SHA}"
-          git tag -f "$MOVE"
-          git push -f origin "$MOVE"

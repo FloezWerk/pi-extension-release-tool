@@ -46,9 +46,9 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
 2. Bump `"version"` in `package.json` to `X.Y.Z`, run `npm run readme`, commit
    both (the README block then already shows the notes on Gitea)
 3. `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin vX.Y.Z`
-   -> Gitea mirrors the tag -> GitHub Actions publishes to npm (provenance),
-   creates the GitHub release from the CHANGELOG section and moves the `vX.Y`
-   tag
+   -> Gitea mirrors the tag -> GitHub Actions publishes to npm (provenance) and
+   creates the GitHub release from the CHANGELOG section (tags are never created
+   by a workflow - Gitea stays the source of truth for refs)
 4. First release of a new repository only: publish manually (`npm login`,
    `npm publish --access public`), set the GitHub secret `NPM_TOKEN`
    afterwards, and do **not** push the tag of that version (the workflow
