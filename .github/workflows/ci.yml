@@ -1,0 +1,13 @@
+name: CI
+
+# Runs on every push to main and on pull requests. The checks live in the shared
+# reusable workflow of this repository (called locally by path, so no tag has to
+# exist yet). It is the same workflow the extensions call via "@v0.1".
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  check:
+    uses: ./.github/workflows/reusable-ci.yml

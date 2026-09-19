@@ -1,0 +1,112 @@
+name: Release (reusable)
+
+# Shared release pipeline for the FloezWerk pi extensions: guards, checks,
+# README release-notes sync, npm publish with provenance, GitHub release with
+# the CHANGELOG section as body, and the moving major.minor tag.
+#
+# Called by a repository's thin `release.yml` on a version tag push (see
+# `template/.github/workflows/release.yml`).
+on:
+  workflow_call:
+    inputs:
+      tooling:
+        description: Command prefix that runs the release tooling
+        type: string
+        default: "npx -y @floez-werk/pi-extension-release-tool@^0.1"
+      node_version:
+        description: Node.js version used for the release
+        type: string
+        default: "22"
+      move_major_tag:
+        description: Move the moving "v<major>.<minor>" tag to this release
+        type: boolean
+        default: true
+    secrets:
+      npm_token:
+        description: npm automation token with publish rights for the package
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write   # create the GitHub release and move the vX.Y tag
+      id-token: write   # npm provenance (OIDC)
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+          registry-url: 'https://registry.npmjs.org'
+
+      # Guards: the tag must match the package version, the version must not
+      # already exist on npm (publishing a moved/reused tag would otherwise fail
+      # late or, worse, silently do nothing) and the CHANGELOG must have an entry.
+      - name: Verify tag, version and CHANGELOG entry
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VER="${TAG#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$VER" != "$PKG" ]; then
+            echo "::error::tag $TAG does not match package.json version $PKG"
+            exit 1
+          fi
+          if ! grep -Fq "## [$VER]" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no '## [$VER]' entry (see AGENTS.md)"
+            exit 1
+          fi
+          NAME_ENC="$(node -p "require('./package.json').name.replace('/', '%2F')")"
+          CODE="$(curl -s -o /dev/null -w '%{http_code}' "https://registry.npmjs.org/$NAME_ENC/$VER")"
+          if [ "$CODE" = "200" ]; then
+            echo "::error::$(node -p "require('./package.json').name")@$VER is already published on npm"
+            exit 1
+          fi
+
+      - name: Repeat CI checks
+        run: npm run check
+
+      # Both the repository hosts and npm render README.md. The block is
+      # committed by the release step (see AGENTS.md) and re-synced here so the
+      # npm package page is correct even when that was forgotten - it is
+      # idempotent and "npm run check" above already verified consistency.
+      # TOOLING is passed via env because `inputs` must not be interpolated
+      # directly into a shell command.
+      - name: Sync the README release-notes block
+        env:
+          TOOLING: ${{ inputs.tooling }}
+        run: $TOOLING sync-readme-changelog
+
+      # The extension is plain TypeScript loaded by pi - no build step needed.
+      - name: Publish to npm (with provenance)
+        run: npm publish --access public --provenance
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token }}
+
+      - name: Build tarball for the GitHub release
+        run: npm pack
+
+      # Same text as the npm package page: the CHANGELOG section of this version.
+      - name: Build release notes
+        env:
+          TOOLING: ${{ inputs.tooling }}
+        run: $TOOLING release-notes --out /tmp/release-notes.md
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: '*.tgz'
+          body_path: /tmp/release-notes.md
+
+      # Moving major.minor tag: repositories pin "@vX.Y" for the reusable
+      # workflows, so patches reach them automatically while a minor bump stays
+      # a deliberate update of the caller.
+      - name: Move the major.minor tag
+        if: ${{ inputs.move_major_tag }}
+        run: |
+          MOVE="v$(node -p "require('./package.json').version.split('.').slice(0,2).join('.')")"
+          echo "Moving $MOVE to ${GITHUB_SHA}"
+          git tag -f "$MOVE"
+          git push -f origin "$MOVE"

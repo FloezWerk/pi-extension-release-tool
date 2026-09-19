@@ -1,0 +1,179 @@
+# pi-extension-release-tool
+
+[![npm](https://img.shields.io/npm/v/@floez-werk/pi-extension-release-tool)](https://www.npmjs.com/package/@floez-werk/pi-extension-release-tool)
+[![license](https://img.shields.io/npm/l/@floez-werk/pi-extension-release-tool)](LICENSE)
+[![CI](https://github.com/FloezWerk/pi-extension-release-tool/actions/workflows/ci.yml/badge.svg)](https://github.com/FloezWerk/pi-extension-release-tool/actions/workflows/ci.yml)
+[![changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-blue)](CHANGELOG.md)
+
+Release tooling, shared CI/CD and the project template for the FloezWerk pi
+extensions. Everything that used to be copied into each extension repository
+lives here once.
+
+## Table of contents
+
+- [What is in here](#what-is-in-here)
+- [Tooling](#tooling)
+- [New extension repository](#new-extension-repository)
+- [Releasing an extension](#releasing-an-extension)
+- [Updating this toolkit](#updating-this-toolkit)
+- [Changelog](#changelog)
+
+## What is in here
+
+- **`tooling/`** - the published npm package
+  [`@floez-werk/pi-extension-release-tool`](https://www.npmjs.com/package/@floez-werk/pi-extension-release-tool)
+  (command `pi-release`): scaffolding, README release-notes sync and release
+  notes. Used by every extension repository via `npx -y …@^0.1 …`.
+- **`template/`** - the skeleton a new extension repository starts from
+  (extension stub, README with badges and the changelog block, `CHANGELOG.md`,
+  `package.json`, `AGENTS.md`, `LICENSE`, `.gitignore`/`.gitattributes`, thin
+  CI/release callers).
+- **`.github/workflows/reusable-*.yml`** - the shared CI and release pipelines.
+  Extension repositories call them with `uses: …/reusable-release.yml@v0.1`, so
+  a fix here reaches all of them without touching their files.
+
+Nothing in here is specific to a single extension; extension-specific code stays
+in the extension repository.
+
+## Tooling
+
+```bash
+# scaffold a new extension repository (see below for the full flow)
+npx -y @floez-werk/pi-extension-release-tool@^0.1 init /srv/projects/piagent-my-ext \
+  --name @floez-werk/piagent-my-ext \
+  --desc "Pi extension: one-line description"
+
+# regenerate the README release-notes block / verify it in CI
+npx -y @floez-werk/pi-extension-release-tool@^0.1 sync-readme-changelog
+npx -y @floez-werk/pi-extension-release-tool@^0.1 sync-readme-changelog --check
+
+# GitHub release body (the CHANGELOG section of the current version)
+npx -y @floez-werk/pi-extension-release-tool@^0.1 release-notes --out /tmp/notes.md
+
+# move the moving "v<major>.<minor>" tag (used by the release workflow)
+npx -y @floez-werk/pi-extension-release-tool@^0.1 tag-major --push
+```
+
+The README and release-notes subcommands read `package.json` (version) and
+`CHANGELOG.md` from the current directory, so they work in any repository.
+
+## New extension repository
+
+Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
+`<repo>` below is the repository name, e.g. `piagent-my-ext`.
+
+1. **Gitea: create the repository** (`FloezWerk/<repo>`, no README/license),
+   then **GitHub: create it as well** (empty, public) - the GitHub repository is
+   the mirror target and runs the workflows.
+2. **Gitea: add the push mirror** - *Settings → Repository → Mirror Settings →
+   Add Push Mirror* with the GitHub URL and **"Sync when new commits are
+   pushed"** enabled. Branches *and* tags are mirrored, which is what makes the
+   release flow work: the tag is pushed to Gitea and GitHub Actions reacts on
+   GitHub.
+3. **Scaffold the repository** (the tooling comes from npm, no clone needed):
+
+   ```bash
+   npx -y @floez-werk/pi-extension-release-tool@^0.1 init /srv/projects/<repo> \
+     --name @floez-werk/<repo> \
+     --desc "Pi extension: one-line description"
+   cd /srv/projects/<repo> && npm run check
+   ```
+
+   The scaffolder replaces all placeholders, generates the README
+   release-notes block, runs `git init -b main` and creates the initial commit.
+   Useful flags: `--ext <file.ts>` (extension file, default `<repo>.ts`),
+   `--cmd <name>` (command without slash), `--owner`, `--no-git`.
+4. **Push to Gitea**:
+
+   ```bash
+   git remote add origin ssh://git@gitea/FloezWerk/<repo>.git
+   git push -u origin main
+   ```
+
+   Verify on GitHub that the commit arrived (the mirror reacts on push).
+5. **First npm publish (manual, once per package)**: the package does not exist
+   on npm yet, so an automation token cannot be scoped to it. Run locally:
+
+   ```bash
+   npm login
+   npm publish --access public
+   ```
+
+   **Do not push the tag of this version** (`v0.1.0`): the release workflow
+   rejects versions that are already published, so the first tag-driven release
+   is the next patch (`v0.1.1`). Keep the `[0.1.0]` link in `CHANGELOG.md`
+   pointing at npm.
+6. **GitHub: set the secret** `NPM_TOKEN` (*Settings → Secrets and variables →
+   Actions*): a granular token with publish rights for the new package (or an
+   account-level automation token). Nothing else is needed - permissions and the
+   workflow call are already in the scaffolded files.
+7. **Optional, after the first tag-driven release**: point the `[Unreleased]`
+   link in `CHANGELOG.md` at `compare/v0.1.1...HEAD` instead of `commits/main`.
+8. **Verify the pipeline** with the next change: bump the patch version, move
+   the `[Unreleased]` bullets into `## [X.Y.Z]`, `npm run readme`, commit, then
+
+   ```bash
+   git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin main vX.Y.Z
+   ```
+
+   GitHub Actions then publishes to npm (with provenance), creates the GitHub
+   release from the CHANGELOG section, attaches the tarball and moves the `vX.Y`
+   tag. `pi.dev/packages` lists the package automatically (`pi-package`
+   keyword).
+
+## Releasing an extension
+
+1. Move the `[Unreleased]` bullets into `## [X.Y.Z] - YYYY-MM-DD` in
+   `CHANGELOG.md`.
+2. Bump `"version"` in `package.json`, run `npm run readme`, commit both.
+3. `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin main vX.Y.Z`.
+
+The rest is the shared pipeline (see `reusable-release.yml`).
+
+## Updating this toolkit
+
+- Versioning is `0.y.z`; **every change to `tooling/` or `template/` must end in
+  a release**, otherwise the pinned `npx` version in the extensions does not see
+  it.
+- Release: `CHANGELOG.md` (`[Unreleased]` → `## [X.Y.Z]`), `npm run readme`,
+  version bump, commit, tag `vX.Y.Z`, push. The release workflow then publishes
+  to npm and **moves the `vX.Y` tag** to this release.
+- Extension repositories pin two refs: the npm package (`@^X.Y` in their
+  `package.json` scripts) and the reusable workflows (`@vX.Y` in their
+  `ci.yml`/`release.yml`). A patch release reaches all of them automatically; a
+  **minor release is a deliberate update** - after a `0.2.0` release, update the
+  pins in the affected repositories.
+- Workflows can be changed without touching the extensions: the tag move is what
+  delivers the change. Watch the first run after a change
+  (`publish` job of the tag build).
+- Changes that require new placeholders in `template/` must also update
+  `tooling/scaffold.mjs`; `npm run check` (self-test) fails otherwise.
+
+## Changelog
+
+Notable changes per version are documented in [CHANGELOG.md](CHANGELOG.md).
+
+<!-- changelog:start -->
+<!-- Generated by pi-release sync-readme-changelog; edit CHANGELOG.md, not this block. -->
+**0.1.0 - 2026-09-19**
+
+### Added
+
+- `pi-release` CLI with the subcommands `init` (scaffold a new extension
+  repository), `sync-readme-changelog` (`--check` for CI), `release-notes` and
+  `tag-major`
+- `template/` skeleton for new pi extension repositories: extension stub,
+  README with badges and the changelog block, CHANGELOG, `package.json`,
+  `AGENTS.md`, `LICENSE`, `.gitignore`/`.gitattributes` and thin CI/release
+  callers
+- Shared reusable workflows `reusable-ci.yml` (checks plus the no-German guard)
+  and `reusable-release.yml` (tag/version/CHANGELOG guards, `npm run check`,
+  README release-notes sync, npm publish with provenance, tarball, GitHub
+  release with the CHANGELOG section as body, moving `vX.Y` tag)
+- Self-test that scaffolds into a temporary directory and verifies placeholders,
+  generated README block, release notes and the guard for stale blocks
+- README with the step-by-step guide for a new extension repository (Gitea,
+  GitHub mirror, npm, first release)
+
+Full history and all versions: [CHANGELOG.md](./CHANGELOG.md)
+<!-- changelog:end -->

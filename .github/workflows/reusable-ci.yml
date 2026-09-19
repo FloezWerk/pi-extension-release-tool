@@ -1,0 +1,40 @@
+name: CI (reusable)
+
+# Shared CI for the FloezWerk pi extensions. Called by the repository's own
+# thin `ci.yml` (see `template/.github/workflows/ci.yml`); changes here reach
+# every repository that pins this ref.
+on:
+  workflow_call:
+    inputs:
+      node_version:
+        description: Node.js version used for the checks
+        type: string
+        default: "22"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node_version }}
+
+      # The checks live in package.json scripts so they run identically on a dev
+      # machine and in CI (see AGENTS.md). There is nothing to install: the
+      # extensions have no runtime dependencies (pi bundles its peers).
+      - name: README, bundle and package content checks
+        run: npm run check
+
+      # AGENTS.md: these projects are English-only. The umlauts are written as
+      # PCRE escapes so this workflow file itself stays free of them (it is
+      # scanned like every other file).
+      - name: No-German guard
+        run: |
+          if grep -rInP --exclude-dir=.git --exclude-dir=node_modules "[\x{e4}\x{f6}\x{fc}\x{c4}\x{d6}\x{dc}\x{df}]" .; then
+            echo '::error::German text found (see AGENTS.md: English only)'
+            exit 1
+          fi

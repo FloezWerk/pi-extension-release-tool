@@ -1,0 +1,27 @@
+/**
+ * __EXT_FILE__ (Pi extension)
+ *
+ * TODO: one short paragraph on what this extension does and how it hooks into
+ * Pi (which events, which commands, which user-facing output).
+ *
+ * All user-facing strings and comments stay English (see AGENTS.md).
+ */
+
+import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
+
+const COMMAND_NAME = "__EXT_CMD__";
+
+export default async function __EXT_FN__(pi: ExtensionAPI): Promise<void> {
+  /**
+   * Replace this with the real extension: subscribe to Pi events
+   * (`pi.on("message_end", ...)`, ...), render status (`ctx.ui.setStatus`),
+   * notify the user (`ctx.ui.notify`) or register commands.
+   */
+  pi.registerCommand(COMMAND_NAME, {
+    description: "Describe what this command does",
+    handler: async (_args: string, ctx): Promise<void> => {
+      if (!ctx.hasUI) return;
+      ctx.ui.notify(`${COMMAND_NAME}: not implemented yet.`, "info");
+    },
+  });
+}

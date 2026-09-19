@@ -1,0 +1,54 @@
+{
+  "name": "__PKG_NAME__",
+  "version": "0.1.0",
+  "description": "__DESC__",
+  "keywords": [
+    "pi-package",
+    "pi-extension"
+  ],
+  "license": "MIT",
+  "author": "__OWNER__",
+  "files": [
+    "extensions",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/__OWNER__/__REPO__.git"
+  },
+  "homepage": "https://github.com/__OWNER__/__REPO__#readme",
+  "bugs": {
+    "url": "https://github.com/__OWNER__/__REPO__/issues"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ]
+  },
+  "scripts": {
+    "readme": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ sync-readme-changelog",
+    "release-notes": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ release-notes",
+    "check": "npm run check:readme && npm run check:bundle && npm run check:pack",
+    "check:readme": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ sync-readme-changelog --check",
+    "check:bundle": "npx -y esbuild@0.25.12 extensions/__EXT_FILE__ --bundle --format=esm --platform=node --external:@earendil-works/* --outfile=/tmp/__REPO__.mjs",
+    "check:pack": "npm pack --dry-run"
+  },
+  "peerDependencies": {
+    "@earendil-works/pi-ai": "*",
+    "@earendil-works/pi-coding-agent": "*",
+    "@earendil-works/pi-tui": "*"
+  },
+  "peerDependenciesMeta": {
+    "@earendil-works/pi-ai": {
+      "optional": true
+    },
+    "@earendil-works/pi-coding-agent": {
+      "optional": true
+    },
+    "@earendil-works/pi-tui": {
+      "optional": true
+    }
+  }
+}

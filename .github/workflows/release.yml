@@ -1,0 +1,24 @@
+name: Release
+
+# Triggered by pushing a version tag (vX.Y.Z). Gitea mirrors the tag to GitHub,
+# where this workflow calls the shared release pipeline of this repository.
+# The call uses the local path (not "@vX.Y"), because the very first release
+# must not depend on a tag that does not exist yet. Publishing to npm happens
+# here and only here.
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write   # create the GitHub release and move the vX.Y tag
+  id-token: write   # npm provenance (OIDC)
+
+jobs:
+  publish:
+    uses: ./.github/workflows/reusable-release.yml
+    with:
+      # The tooling is part of this repository, so run it from the checkout.
+      tooling: node tooling/cli.mjs
+    secrets:
+      npm_token: ${{ secrets.NPM_TOKEN }}
