@@ -1,7 +1,7 @@
 # __REPO__
 
 [![npm](https://img.shields.io/npm/v/__PKG_NAME__)](https://www.npmjs.com/package/__PKG_NAME__)
-[![license](https://img.shields.io/npm/l/__PKG_NAME__)](LICENSE)
+[![license](https://img.shields.io/github/license/__OWNER__/__REPO__)](LICENSE)
 [![CI](https://github.com/__OWNER__/__REPO__/actions/workflows/ci.yml/badge.svg)](https://github.com/__OWNER__/__REPO__/actions/workflows/ci.yml)
 [![changelog](https://img.shields.io/badge/changelog-Keep%20a%20Changelog-blue)](CHANGELOG.md)
 

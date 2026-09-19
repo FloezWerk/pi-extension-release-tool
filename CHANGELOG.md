@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-09-19
+
+### Fixed
+
+- The README license badge (toolkit and template) reads
+  `img.shields.io/github/license/<owner>/<repo>` instead of the npm registry
+  badge: it renders from the `LICENSE` file and does not stay red when the npm
+  registry CDN (or GitHub's image proxy) still has the "package not found"
+  result cached from before the first publish.
+
 ## [0.1.1] - 2026-09-19
 
 ### Changed
@@ -39,6 +49,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- [Unreleased] compares against the last tagged version. Versions link to
      their GitHub release page (created by release.yml); 0.1.0 has no tag
      (the first publish was manual), so it links to npm. -->
-[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.2
 [0.1.1]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.1
 [0.1.0]: https://www.npmjs.com/package/@floez-werk/pi-extension-release-tool/v/0.1.0
