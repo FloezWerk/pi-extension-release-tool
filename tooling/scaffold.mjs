@@ -11,7 +11,7 @@ import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, mkdirSync, statSync, writeFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
-import { syncReadmeChangelog } from "./readme-block.mjs";
+import { syncReadme } from "./readme-block.mjs";
 
 const TEMPLATE_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "template");
 const TOOLKIT_REPO = "pi-extension-release-tool";
@@ -126,7 +126,7 @@ export function scaffold(dir, flags) {
   }
 
   // The block is derived, so generate it once instead of shipping stale text.
-  const message = syncReadmeChangelog({
+  const message = syncReadme({
     readmePath: join(dir, "README.md"),
     changelogPath: join(dir, "CHANGELOG.md"),
     packagePath: join(dir, "package.json"),

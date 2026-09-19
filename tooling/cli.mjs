@@ -3,10 +3,10 @@
  * Release tooling for FloezWerk pi extensions (`pi-release`).
  *
  * Subcommands
- *   init <dir> [options]              scaffold a new extension repository
- *   sync-readme-changelog [--check]   refresh the README release-notes block
- *   release-notes [--out <file>]      CHANGELOG section of the package version
- *   tag-major [--push]                move the `vX.Y` tag to the current release
+ *   init <dir> [options]         scaffold a new extension repository
+ *   sync-readme [--check]        refresh the generated README blocks
+ *   release-notes [--out <file>] CHANGELOG section of the package version
+ *   tag-major [--push]           move the `vX.Y` tag to the current release
  *
  * The README and release-notes subcommands derive everything from
  * `package.json` and `CHANGELOG.md` in the current working directory, so they
@@ -15,7 +15,7 @@
 
 import { execFileSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
-import { releaseNotes, syncReadmeChangelog } from "./readme-block.mjs";
+import { releaseNotes, syncReadme } from "./readme-block.mjs";
 import { scaffold } from "./scaffold.mjs";
 
 const USAGE = `Usage: pi-release <command> [options]
@@ -32,11 +32,16 @@ Commands:
     [--force]                  Write into a non-empty directory
     [--no-git]                 Skip "git init" and the initial commit
 
-  sync-readme-changelog        Regenerate the README release-notes block
-    [--check]                  Fail when the committed block is stale
+  sync-readme                  Regenerate the generated README blocks (badges,
+                               release notes); the badges block is skipped when
+                               a repository has no markers for it
+    [--check]                  Fail when a committed block is stale
     [--readme <file>]          Default: README.md
     [--changelog <file>]       Default: CHANGELOG.md
     [--package <file>]         Default: package.json
+
+  sync-readme-changelog        Deprecated alias for sync-readme (kept for
+                               repositories that still call it)
 
   release-notes                Print the CHANGELOG section of the package version
     [--out <file>]             Write to a file instead of stdout
@@ -111,9 +116,10 @@ function main() {
         scaffold(dir, flags);
         return;
       }
+      case "sync-readme":
       case "sync-readme-changelog":
         console.log(
-          syncReadmeChangelog({
+          syncReadme({
             readmePath: flags.get("readme") ?? "README.md",
             changelogPath: flags.get("changelog") ?? "CHANGELOG.md",
             packagePath: flags.get("package") ?? "package.json",

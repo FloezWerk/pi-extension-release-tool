@@ -74,6 +74,14 @@ try {
     fail("check:readme does not reference the published tooling");
   }
 
+  const readme = readFileSync(join(dir, "README.md"), "utf8");
+  const badges = /<!-- badges:start -->([\s\S]*?)<!-- badges:end -->/.exec(readme)?.[1] ?? "";
+  if (!badges.includes(`img.shields.io/npm/v/${PACKAGE}`)) fail("badges block has no npm version badge");
+  if (!badges.includes("img.shields.io/github/license/FloezWerk/piagent-self-test")) {
+    fail("badges block has no license badge for the repository");
+  }
+  if (!badges.includes("actions/workflows/ci.yml/badge.svg")) fail("badges block has no CI badge");
+
   const workflows = `${readFileSync(join(dir, ".github/workflows/ci.yml"), "utf8")}\n${readFileSync(
     join(dir, ".github/workflows/release.yml"),
     "utf8",
@@ -85,8 +93,9 @@ try {
 
   // The generated README block must match the generated CHANGELOG, and the
   // release notes must be derivable - verified with the tooling itself.
-  const check = run(["sync-readme-changelog", "--check"], { cwd: dir });
-  if (!check.includes("matches 0.1.0")) fail(`unexpected check output: ${check.trim()}`);
+  const check = run(["sync-readme", "--check"], { cwd: dir });
+  if (!check.includes("release-notes block (0.1.0) is up to date")) fail(`unexpected check output: ${check.trim()}`);
+  if (!check.includes("badges block is up to date")) fail(`badges block was not verified: ${check.trim()}`);
 
   const notes = run(["release-notes"], { cwd: dir });
   if (!notes.includes("### Changes in 0.1.0")) fail(`unexpected release notes: ${notes.trim()}`);
@@ -103,15 +112,26 @@ try {
 
   // Negative test: a stale README block must be reported.
   const readmePath = join(dir, "README.md");
-  const original = readFileSync(readmePath, "utf8");
+  const original = readme;
+
   writeFileSync(readmePath, original.replace("**0.1.0 - ", "**9.9.9 - "), "utf8");
   let staleReported = false;
   try {
-    run(["sync-readme-changelog", "--check"], { cwd: dir, stdio: "pipe" });
+    run(["sync-readme", "--check"], { cwd: dir, stdio: "pipe" });
   } catch {
     staleReported = true;
   }
   if (!staleReported) fail("a stale README release-notes block was not reported");
+
+  // Negative test: a stale badges block must be reported as well.
+  writeFileSync(readmePath, original.replace("npm/v/" + PACKAGE, "npm/v/@floez-werk/other"), "utf8");
+  let staleBadgesReported = false;
+  try {
+    run(["sync-readme", "--check"], { cwd: dir, stdio: "pipe" });
+  } catch {
+    staleBadgesReported = true;
+  }
+  if (!staleBadgesReported) fail("a stale README badges block was not reported");
   writeFileSync(readmePath, original, "utf8");
 
   if (process.exitCode) {

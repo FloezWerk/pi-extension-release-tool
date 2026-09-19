@@ -77,7 +77,7 @@ jobs:
       - name: Sync the README release-notes block
         env:
           TOOLING: ${{ inputs.tooling }}
-        run: $TOOLING sync-readme-changelog
+        run: $TOOLING sync-readme
 
       # The extension is plain TypeScript loaded by pi - no build step needed.
       - name: Publish to npm (with provenance)

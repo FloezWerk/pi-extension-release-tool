@@ -28,10 +28,10 @@
     ]
   },
   "scripts": {
-    "readme": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ sync-readme-changelog",
+    "readme": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ sync-readme",
     "release-notes": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ release-notes",
     "check": "npm run check:readme && npm run check:bundle && npm run check:pack",
-    "check:readme": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ sync-readme-changelog --check",
+    "check:readme": "npx -y __TOOLKIT_PKG__@__TOOLKIT_SEMVER__ sync-readme --check",
     "check:bundle": "npx -y esbuild@0.25.12 extensions/__EXT_FILE__ --bundle --format=esm --platform=node --external:@earendil-works/* --outfile=/tmp/__REPO__.mjs",
     "check:pack": "npm pack --dry-run"
   },

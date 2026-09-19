@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-09-19
+
+### Added
+
+- The README badges are generated as well (a second marked block, next to the
+  release notes): `pi-release sync-readme` writes the npm version, license, CI
+  and changelog badges from `package.json`, so badge URLs can no longer go stale
+  in individual repositories. Repositories without those markers are skipped,
+  which keeps the block opt-in.
+
+### Changed
+
+- `sync-readme` replaces `sync-readme-changelog` and refreshes (or, with
+  `--check`, verifies) both generated blocks; the old name stays as a
+  deprecated alias. `reusable-release.yml` and the template use the new name.
+
 ## [0.1.2] - 2026-09-19
 
 ### Fixed
@@ -49,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- [Unreleased] compares against the last tagged version. Versions link to
      their GitHub release page (created by release.yml); 0.1.0 has no tag
      (the first publish was manual), so it links to npm. -->
-[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.2...HEAD
+[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.3
 [0.1.2]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.2
 [0.1.1]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.1
 [0.1.0]: https://www.npmjs.com/package/@floez-werk/pi-extension-release-tool/v/0.1.0

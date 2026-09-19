@@ -31,16 +31,20 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
 - Every change to `tooling/` or `template/` is user-facing for the extensions:
   add a bullet under `## [Unreleased]` in `CHANGELOG.md` (same commit).
 - Docs-only or CI-internal tweaks inside this repo: no entry.
-- `README.md` shows the release notes of the current version in the marked
-  block: generated from `CHANGELOG.md` via `npm run readme`, never edited by
-  hand.
+- `README.md` has two generated blocks: the badges (from `package.json`) and
+  the release notes of the current version (from `CHANGELOG.md`). Both are
+  written by `npm run readme` and verified by `npm run check` - never edit them
+  by hand.
 - The release workflow rejects a tag without a matching `## [X.Y.Z]` entry.
 
 ## Checks
 
-- `npm run check` - README release-notes block is up to date, `node --check` on
-  the tooling, the self-test (scaffolds into a temp dir and verifies the result,
-  including the negative cases) and `npm pack --dry-run`.
+- `npm run check` - both generated README blocks are up to date, `node --check`
+  on the tooling, the self-test (scaffolds into a temp dir and verifies the
+  result, including the negative cases) and `npm pack --dry-run`.
+- Never write the block markers (`badges:start`/`badges:end`,
+  `changelog:start`/`changelog:end`) with the HTML comment syntax in prose or in
+  `CHANGELOG.md`: the checks would see a duplicate marker.
 - A change to `template/` placeholders also needs a change in
   `tooling/scaffold.mjs`; the self-test fails otherwise.
 - Keep `template/` and `tooling/` free of repository-specific assumptions - they
