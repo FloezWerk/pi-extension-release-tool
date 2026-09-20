@@ -31,7 +31,8 @@ lives here once.
 - **`template/`** - the skeleton a new extension repository starts from
   (extension stub, README with badges and the changelog block, `CHANGELOG.md`,
   `package.json`, `AGENTS.md`, `LICENSE`, `.gitignore`/`.gitattributes`, thin
-  CI/release callers).
+  CI/release callers, and a `.gitea/workflows/` placeholder that keeps Gitea
+  from scheduling the GitHub-only workflows).
 - **`.github/workflows/reusable-*.yml`** - the shared CI and release pipelines.
   Extension repositories call them with `uses: …/reusable-release.yml@v0.1`, so
   a fix here reaches all of them without touching their files.
@@ -85,6 +86,12 @@ Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
    pushed"** enabled. Branches *and* tags are mirrored, which is what makes the
    release flow work: the tag is pushed to Gitea and GitHub Actions reacts on
    GitHub.
+
+   Gitea must not run the workflows itself (it has no runner): the scaffolded
+   `.gitea/workflows/` directory makes Gitea stop looking for workflows before it
+   reads `.github/workflows`. Keep that placeholder in place, otherwise every
+   push shows up in the Gitea Actions tab as a queued run with
+   "No runner is online to pick up this job."
 3. **Scaffold the repository** (the tooling comes from npm, no clone needed):
 
    ```bash

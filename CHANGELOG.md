@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- The template ships `.gitea/workflows/` with a README placeholder. Gitea scans
+  that directory before `.github/workflows` and only falls back when it does not
+  exist, so the scaffolded repositories no longer queue a run for every push to
+  Gitea (“No runner is online to pick up this job.”): the GitHub-only workflows
+  are never scheduled there.
+
 ## [0.1.3] - 2026-09-19
 
 ### Added

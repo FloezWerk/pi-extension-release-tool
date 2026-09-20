@@ -55,6 +55,10 @@ try {
     ".gitattributes",
     ".github/workflows/ci.yml",
     ".github/workflows/release.yml",
+    // Gitea scans `.gitea/workflows` first and only falls back to
+    // `.github/workflows` when the directory is missing; the placeholder keeps
+    // Gitea from scheduling the GitHub-only workflows (see the file itself).
+    ".gitea/workflows/README.md",
     EXPECTED_EXT,
   ];
   for (const file of required) {
