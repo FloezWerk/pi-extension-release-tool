@@ -51,8 +51,10 @@ const packument = Array.isArray(parsed) ? parsed[0] : Object.values(parsed)[0];
 const packed = new Set(packument.files.map((file) => file.path));
 
 // Everything on disk must reach the tarball: the tooling, the complete template
-// (npm's own exclusion rules may drop entries) and the root docs.
+// (npm's own exclusion rules may drop entries), the prompt templates and the
+// root docs.
 const expected = [
+  ...listFiles("prompts"),
   ...listFiles("tooling").filter((file) => file.endsWith(".mjs")),
   ...listFiles("template"),
   ...REQUIRED_ROOT_FILES,
@@ -70,5 +72,5 @@ if (unexpected.length > 0) {
 }
 
 if (!process.exitCode) {
-  console.log(`npm pack ships all ${expected.length} expected files (tooling, template, docs).`);
+  console.log(`npm pack ships all ${expected.length} expected files (prompts, tooling, template, docs).`);
 }

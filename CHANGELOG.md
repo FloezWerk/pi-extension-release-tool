@@ -7,8 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-09-20
+
 ### Added
 
+- The toolkit doubles as a pi package and ships one prompt template
+  (`prompts/new-pi-extension.md`): after
+  `pi install npm:@floez-werk/pi-extension-release-tool`, `/new-pi-extension`
+  asks for the package name, the brief and the optional `init` flags, then
+  scaffolds the repository and implements the extension following this README.
+  The package is flagged as a pi package (`pi-package` keyword, `pi.prompts`),
+  so pi discovers the template automatically (`/reload` after an update).
 - The template ships `.gitea/workflows/` with a README placeholder. Gitea scans
   that directory before `.github/workflows` and only falls back when it does not
   exist, so the scaffolded repositories no longer queue a run for every push to
@@ -73,7 +82,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- [Unreleased] compares against the last tagged version. Versions link to
      their GitHub release page (created by release.yml); 0.1.0 has no tag
      (the first publish was manual), so it links to npm. -->
-[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.3...HEAD
+[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.4...HEAD
+[0.1.4]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.4
 [0.1.3]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.3
 [0.1.2]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.2
 [0.1.1]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.1

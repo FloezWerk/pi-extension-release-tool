@@ -1,14 +1,23 @@
 {
   "name": "@floez-werk/pi-extension-release-tool",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Release tooling for FloezWerk pi extensions: scaffolding, README release-notes sync, GitHub release notes and the shared CI/CD workflows.",
   "license": "MIT",
   "author": "FloezWerk",
+  "keywords": [
+    "pi-package"
+  ],
   "type": "module",
   "bin": {
     "pi-release": "tooling/cli.mjs"
   },
+  "pi": {
+    "prompts": [
+      "./prompts"
+    ]
+  },
   "files": [
+    "prompts",
     "tooling",
     "template",
     "README.md",

@@ -21,6 +21,8 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
   `changelog-section.mjs`, `scaffold.mjs`, `self-test.mjs`)
 - `template/` - skeleton for new extension repositories, copied by `init`;
   `__PLACEHOLDER__` tokens are replaced by `tooling/scaffold.mjs`
+- `prompts/` - prompt templates shipped with the npm package (the interactive
+  `/new-pi-extension` wizard); pi discovers them when the package is installed
 - `README.md` - the guide (tooling, new extension, releasing, updating)
 - `.github/workflows/` - own `ci.yml`/`release.yml` (local callers) plus the
   **reusable** workflows the extensions call via `@vX.Y`
