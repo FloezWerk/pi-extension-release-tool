@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.5](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.5) - 2026-10-08
+
 ### Changed
 
 - Version headings in `CHANGELOG.md` render as `X.Y.Z - YYYY-MM-DD` - no square
@@ -90,4 +92,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- [Unreleased] compares against the last tagged version. Every version
      heading links to its GitHub release page (created by release.yml); 0.1.0
      has no tag (the first publish was manual), so it links to npm. -->
-[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.4...HEAD
+[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.5...HEAD
