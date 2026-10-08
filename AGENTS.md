@@ -37,7 +37,8 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
   the release notes of the current version (from `CHANGELOG.md`). Both are
   written by `npm run readme` and verified by `npm run check` - never edit them
   by hand.
-- The release workflow rejects a tag without a matching `## [X.Y.Z]` entry.
+- The release workflow rejects a tag without a matching `X.Y.Z` heading (the
+  version links its GitHub release).
 
 ## Checks
 
@@ -54,7 +55,8 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
 
 ## Releasing
 
-1. `CHANGELOG.md`: move `[Unreleased]` bullets into `## [X.Y.Z] - YYYY-MM-DD`
+1. `CHANGELOG.md`: move `[Unreleased]` bullets into a heading
+   `X.Y.Z - YYYY-MM-DD`, with the version as the link to its GitHub release
 2. Bump `"version"` in `package.json`, run `npm run readme`, commit both
 3. `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin main vX.Y.Z`
    -> Gitea mirrors the tag -> `release.yml` (local caller of the reusable

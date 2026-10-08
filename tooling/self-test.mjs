@@ -95,6 +95,13 @@ try {
   }
   if (!workflows.includes("@v0.1")) fail("workflows do not pin the toolkit ref");
 
+  // The version heading carries the release link (no square brackets around
+  // the rendered version) and the date stays parseable from it.
+  const changelog = readFileSync(join(dir, "CHANGELOG.md"), "utf8");
+  if (!/^## \[0\.1\.0\]\(https:\/\/www\.npmjs\.com\/package\/[^)]+\) - \S+$/m.test(changelog)) {
+    fail("CHANGELOG.md 0.1.0 heading does not link the release");
+  }
+
   // The generated README block must match the generated CHANGELOG, and the
   // release notes must be derivable - verified with the tooling itself.
   const check = run(["sync-readme", "--check"], { cwd: dir });

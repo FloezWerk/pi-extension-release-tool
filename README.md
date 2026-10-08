@@ -142,8 +142,8 @@ Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
 
    **Do not push the tag of this version** (`v0.1.0`): the release workflow
    rejects versions that are already published, so the first tag-driven release
-   is the next patch (`v0.1.1`). Keep the `[0.1.0]` link in `CHANGELOG.md`
-   pointing at npm.
+   is the next patch (`v0.1.1`). Keep the `0.1.0` heading link in
+   `CHANGELOG.md` pointing at npm.
 6. **GitHub: set the secret** `NPM_TOKEN` (*Settings → Secrets and variables →
    Actions*): a granular token with publish rights for the new package (or an
    account-level automation token). Nothing else is needed - permissions and the
@@ -151,7 +151,8 @@ Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
 7. **Optional, after the first tag-driven release**: point the `[Unreleased]`
    link in `CHANGELOG.md` at `compare/v0.1.1...HEAD` instead of `commits/main`.
 8. **Verify the pipeline** with the next change: bump the patch version, move
-   the `[Unreleased]` bullets into `## [X.Y.Z]`, `npm run readme`, commit, then
+   the `[Unreleased]` bullets into a heading `X.Y.Z - YYYY-MM-DD` (version
+   linked to its GitHub release), `npm run readme`, commit, then
 
    ```bash
    git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin main vX.Y.Z
@@ -163,8 +164,8 @@ Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
 
 ## Releasing an extension
 
-1. Move the `[Unreleased]` bullets into `## [X.Y.Z] - YYYY-MM-DD` in
-   `CHANGELOG.md`.
+1. Move the `[Unreleased]` bullets into a heading `X.Y.Z - YYYY-MM-DD` (the
+   version links its GitHub release) in `CHANGELOG.md`.
 2. Bump `"version"` in `package.json`, run `npm run readme`, commit both.
 3. `git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin main vX.Y.Z`.
 
@@ -175,8 +176,9 @@ The rest is the shared pipeline (see `reusable-release.yml`).
 - Versioning is `0.y.z`; **every change to `tooling/` or `template/` must end in
   a release**, otherwise the pinned `npx` version in the extensions does not see
   it.
-- Release: `CHANGELOG.md` (`[Unreleased]` → `## [X.Y.Z]`), `npm run readme`,
-  version bump, commit, tag `vX.Y.Z`, push. The release workflow then publishes
+- Release: `CHANGELOG.md` (`[Unreleased]` → heading `X.Y.Z - YYYY-MM-DD`),
+  `npm run readme`, version bump, commit, tag `vX.Y.Z`, push. The release
+  workflow then publishes
   to npm and creates the GitHub release.
 - Afterwards move the moving tag **locally**: `npm run tag-major` sets `vX.Y` to
   this release and pushes it to Gitea, which mirrors it to GitHub. Tags are never

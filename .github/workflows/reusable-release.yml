@@ -54,8 +54,8 @@ jobs:
             echo "::error::tag $TAG does not match package.json version $PKG"
             exit 1
           fi
-          if ! grep -Fq "## [$VER]" CHANGELOG.md; then
-            echo "::error::CHANGELOG.md has no '## [$VER]' entry (see AGENTS.md)"
+          if ! grep -Fq "## [$VER](" CHANGELOG.md; then
+            echo "::error::CHANGELOG.md has no 'X.Y.Z - YYYY-MM-DD' entry for $VER with the release link (see AGENTS.md)"
             exit 1
           fi
           NAME_ENC="$(node -p "require('./package.json').name.replace('/', '%2F')")"

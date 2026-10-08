@@ -125,7 +125,7 @@ export function syncChangelogBlock({
   const version = packageVersion(packagePath);
   const changelog = readFileSync(changelogPath, "utf8");
   const section = changelogSection(changelog, version);
-  if (!section) throw new Error(`${changelogPath} has no ## [${version}] section`);
+  if (!section) throw new Error(`${changelogPath} has no section for version ${version}`);
 
   const readme = readFileSync(readmePath, "utf8");
   const where = markers(readme, readmePath, CHANGELOG_START, CHANGELOG_END);
@@ -147,7 +147,7 @@ export function syncReadme(options = {}) {
 export function releaseNotes(packagePath = "package.json", changelogPath = "CHANGELOG.md") {
   const version = packageVersion(packagePath);
   const section = changelogSection(readFileSync(changelogPath, "utf8"), version);
-  if (!section) throw new Error(`${changelogPath} has no ## [${version}] section`);
+  if (!section) throw new Error(`${changelogPath} has no section for version ${version}`);
 
   return { version, notes: `### Changes in ${version}\n\n${section}\n` };
 }

@@ -8,9 +8,10 @@
  */
 
 /**
- * Returns the body of the `## [version]` section, without the heading and
- * without the trailing link-reference definitions that close the file.
- * Returns null when the version has no section.
+ * Returns the body of the version section (`X.Y.Z - YYYY-MM-DD`, the version
+ * as the link to its release), without the heading and without the trailing
+ * link-reference definitions that close the file. Returns null when the
+ * version has no section.
  */
 export function changelogSection(text, version) {
   const lines = text.split("\n");
@@ -32,9 +33,12 @@ export function changelogSection(text, version) {
   return section || null;
 }
 
-/** Date of the `## [version] - YYYY-MM-DD` heading, or null. */
+/**
+ * Date of the `X.Y.Z - YYYY-MM-DD` heading, or null. The version carries the
+ * link to its release, so the date follows the link target.
+ */
 export function changelogDate(text, version) {
-  const match = new RegExp(`^## \\[${version}\\]\\s*-\\s*(\\S+)\\s*$`, "m").exec(text);
+  const match = new RegExp(`^## \\[${version}\\](?:\\([^)]*\\))?\\s*-\\s*(\\S+)\\s*$`, "m").exec(text);
   return match ? match[1] : null;
 }
 

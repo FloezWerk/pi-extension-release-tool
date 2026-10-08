@@ -7,7 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.1.4] - 2026-09-20
+### Changed
+
+- Version headings in `CHANGELOG.md` render as `X.Y.Z - YYYY-MM-DD` - no square
+  brackets - because the version itself is the link to its GitHub release
+  instead of a link-reference definition at the bottom of the file. The toolkit,
+  the template, the release guard and the `release-notes` parsing follow the
+  linked heading; the list at the bottom only holds `[Unreleased]`.
+
+## [0.1.4](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.4) - 2026-09-20
 
 ### Added
 
@@ -24,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Gitea (“No runner is online to pick up this job.”): the GitHub-only workflows
   are never scheduled there.
 
-## [0.1.3] - 2026-09-19
+## [0.1.3](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.3) - 2026-09-19
 
 ### Added
 
@@ -40,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   `--check`, verifies) both generated blocks; the old name stays as a
   deprecated alias. `reusable-release.yml` and the template use the new name.
 
-## [0.1.2] - 2026-09-19
+## [0.1.2](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.2) - 2026-09-19
 
 ### Fixed
 
@@ -50,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   registry CDN (or GitHub's image proxy) still has the "package not found"
   result cached from before the first publish.
 
-## [0.1.1] - 2026-09-19
+## [0.1.1](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.1) - 2026-09-19
 
 ### Changed
 
@@ -59,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   single source of truth for refs (a workflow-set tag existed on GitHub only).
   `reusable-release.yml` therefore lost the `move_major_tag` input.
 
-## [0.1.0] - 2026-09-19
+## [0.1.0](https://www.npmjs.com/package/@floez-werk/pi-extension-release-tool/v/0.1.0) - 2026-09-19
 
 ### Added
 
@@ -79,12 +87,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - README with the step-by-step guide for a new extension repository (Gitea,
   GitHub mirror, npm, first release)
 
-<!-- [Unreleased] compares against the last tagged version. Versions link to
-     their GitHub release page (created by release.yml); 0.1.0 has no tag
-     (the first publish was manual), so it links to npm. -->
+<!-- [Unreleased] compares against the last tagged version. Every version
+     heading links to its GitHub release page (created by release.yml); 0.1.0
+     has no tag (the first publish was manual), so it links to npm. -->
 [Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.4...HEAD
-[0.1.4]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.4
-[0.1.3]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.3
-[0.1.2]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.2
-[0.1.1]: https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.1
-[0.1.0]: https://www.npmjs.com/package/@floez-werk/pi-extension-release-tool/v/0.1.0
