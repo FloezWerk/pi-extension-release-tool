@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The scaffolded repositories and the prompt template now state the entry rule:
+  changelog entries are compact, not too technical, at most two sentences.
+
 ## [0.1.5](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.5) - 2026-10-08
 
 ### Changed

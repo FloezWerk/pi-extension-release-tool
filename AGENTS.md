@@ -32,6 +32,7 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
 
 - Every change to `tooling/` or `template/` is user-facing for the extensions:
   add a bullet under `## [Unreleased]` in `CHANGELOG.md` (same commit).
+- Entries are compact and not too technical: at most two sentences.
 - Docs-only or CI-internal tweaks inside this repo: no entry.
 - `README.md` has two generated blocks: the badges (from `package.json`) and
   the release notes of the current version (from `CHANGELOG.md`). Both are

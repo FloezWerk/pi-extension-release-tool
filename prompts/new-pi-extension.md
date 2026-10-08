@@ -65,7 +65,7 @@ cd <dir> && npm run check
 - Update `README.md`: `Behavior` (before/after example), the `Commands` table and
   the dependencies when needed.
 - `CHANGELOG.md`: every user-facing change gets a bullet under `## [Unreleased]`
-  in the same commit.
+  in the same commit - compact, not too technical, at most two sentences.
 - Never edit the generated README blocks (the badges block and the release-notes
   block) by hand - run `npm run readme` instead.
 - Never commit sensitive data (the Gitea repository is mirrored to public GitHub).
