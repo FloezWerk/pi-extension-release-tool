@@ -7,33 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-
-- The release guide explains prereleases: they use the `next` dist-tag and never become `latest` or the GitHub "Latest" release.
-
-## [0.1.6-oidc.3](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.6-oidc.3) - 2026-10-13
-
-### Changed
-
-- Test release: trusted publishing with token publishing disallowed.
-
-## [0.1.6-oidc.2](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.6-oidc.2) - 2026-10-13
-
-### Changed
-
-- Test release: the shared workflows run on the Node 24 action versions.
-
-## [0.1.6-oidc.1](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.6-oidc.1) - 2026-10-13
+## [0.1.6](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.6) - 2026-10-13
 
 ### Added
 
 - The shared release workflow publishes via npm trusted publishing when no `NPM_TOKEN` is set. Existing token setups keep working.
-- Prereleases are published under the `next` dist-tag, so `latest` stays on the last stable version.
+- Prereleases are published under the `next` dist-tag and marked as prerelease on GitHub, so `latest` and the GitHub "Latest" release stay on the last stable version.
 
 ### Changed
 
 - The scaffolded repositories and the prompt template now state the entry rule:
   changelog entries are compact, not too technical, at most two sentences.
+- The release guide (`AGENTS.md` and the template) explains prerelease handling.
 
 ## [0.1.5](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.5) - 2026-10-08
 
@@ -120,4 +105,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- [Unreleased] compares against the last tagged version. Every version
      heading links to its GitHub release page (created by release.yml); 0.1.0
      has no tag (the first publish was manual), so it links to npm. -->
-[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.6-oidc.3...HEAD
+[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.6...HEAD
