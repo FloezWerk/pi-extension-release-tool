@@ -144,10 +144,11 @@ Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
    rejects versions that are already published, so the first tag-driven release
    is the next patch (`v0.1.1`). Keep the `0.1.0` heading link in
    `CHANGELOG.md` pointing at npm.
-6. **GitHub: set the secret** `NPM_TOKEN` (*Settings → Secrets and variables →
-   Actions*): a granular token with publish rights for the new package (or an
-   account-level automation token). Nothing else is needed - permissions and the
-   workflow call are already in the scaffolded files.
+6. **npmjs.com: add a Trusted Publisher** (*package → Settings → Trusted
+   Publisher*): owner and repository of the GitHub repo, workflow filename
+   `release.yml`, no environment. No `NPM_TOKEN` secret is needed - permissions
+   and the workflow call are already in the scaffolded files. Optional: enable
+   "Require two-factor authentication and disallow tokens" for the package.
 7. **Optional, after the first tag-driven release**: point the `[Unreleased]`
    link in `CHANGELOG.md` at `compare/v0.1.1...HEAD` instead of `commits/main`.
 8. **Verify the pipeline** with the next change: bump the patch version, move

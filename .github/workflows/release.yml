@@ -20,5 +20,3 @@ jobs:
     with:
       # The tooling is part of this repository, so run it from the checkout.
       tooling: node tooling/cli.mjs
-    secrets:
-      npm_token: ${{ secrets.NPM_TOKEN }}

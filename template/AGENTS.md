@@ -53,10 +53,10 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
    creates the GitHub release from the CHANGELOG section (tags are never created
    by a workflow - Gitea stays the source of truth for refs)
 4. First release of a new repository only: publish manually (`npm login`,
-   `npm publish --access public`), set the GitHub secret `NPM_TOKEN`
-   afterwards, and do **not** push the tag of that version (the workflow
-   rejects an already published version) - the first tag-driven release is the
-   next patch.
+   `npm publish --access public`), then add a Trusted Publisher on npmjs.com
+   (owner, repo, workflow `release.yml`), and do **not** push the tag of that
+   version (the workflow rejects an already published version) - the first
+   tag-driven release is the next patch.
 
 Prereleases (version with `-`, e.g. `0.1.6-oidc.1`):
 - npm dist-tag `next`, `latest` stays on the last stable version

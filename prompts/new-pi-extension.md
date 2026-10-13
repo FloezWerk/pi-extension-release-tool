@@ -92,6 +92,7 @@ Then list the **manual steps** from the README as a checklist:
 3. First npm publish is manual: `npm login && npm publish --access public` - do
    not push the tag of that version (the first tag-driven release is the next
    patch).
-4. Set the GitHub secret `NPM_TOKEN` (granular token with publish rights).
+4. Add a Trusted Publisher on npmjs.com for the package (owner, repo, workflow
+   `release.yml`, no environment). No `NPM_TOKEN` secret is needed.
 5. Optional: point the `[Unreleased]` link in `CHANGELOG.md` at
    `compare/vX.Y.Z...HEAD`.

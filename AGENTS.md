@@ -69,8 +69,8 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
    scripts) - a patch release reaches them after step 4, a **minor** release
    is a deliberate update of their pins (see README)
 6. First release of the package only: publish manually (`npm login`,
-   `npm publish --access public`), then set the GitHub secret `NPM_TOKEN`, and
-   do **not** push the tag of that version
+   `npm publish --access public`), then add a Trusted Publisher on npmjs.com
+   (repo, workflow `release.yml`), and do **not** push the tag of that version
 
 Prereleases (version with `-`, e.g. `0.1.6-oidc.1`):
 - npm dist-tag `next`, `latest` stays on the last stable version

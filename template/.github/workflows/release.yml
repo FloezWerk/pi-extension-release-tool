@@ -11,8 +11,8 @@ on:
       - 'v*.*.*'
 
 # Required by the called workflow: create the GitHub release and mint the OIDC
-# token for npm provenance. Secrets cannot be inherited here (that is only
-# allowed inside an organization), so NPM_TOKEN is mapped explicitly below.
+# token for npm trusted publishing. No npm secret is passed: npm authorises this
+# workflow file through the Trusted Publisher set on npmjs.com for this package.
 permissions:
   contents: write
   id-token: write
@@ -20,5 +20,3 @@ permissions:
 jobs:
   publish:
     uses: __OWNER__/__TOOLKIT_REPO__/.github/workflows/reusable-release.yml@__TOOLKIT_REF__
-    secrets:
-      npm_token: ${{ secrets.NPM_TOKEN }}

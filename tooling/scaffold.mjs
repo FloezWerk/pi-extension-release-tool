@@ -147,7 +147,7 @@ export function scaffold(dir, flags) {
       `  1. npm run check`,
       `  2. git remote add origin ssh://git@gitea/${owner}/${repo}.git && git push -u origin main`,
       `  3. create the GitHub repo, add the Gitea push mirror ("sync when new commits are pushed")`,
-      `  4. first npm publish (manual, 2FA) and then set the GitHub secret NPM_TOKEN`,
+      `  4. first npm publish (manual, 2FA), then add a Trusted Publisher on npmjs.com (repo, workflow release.yml)`,
       `  5. tag releases from then on: git tag -a v0.1.1 -m v0.1.1 && git push origin v0.1.1`,
     ].join("\n"),
   );
