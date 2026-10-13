@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- The shared release workflow publishes via npm trusted publishing when no `NPM_TOKEN` is set. Existing token setups keep working.
+- Prereleases are published under the `next` dist-tag, so `latest` stays on the last stable version.
+
 ### Changed
 
 - The scaffolded repositories and the prompt template now state the entry rule:
