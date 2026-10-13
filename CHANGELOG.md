@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.6-oidc.1](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.6-oidc.1) - 2026-10-13
+
 ### Added
 
 - The shared release workflow publishes via npm trusted publishing when no `NPM_TOKEN` is set. Existing token setups keep working.
@@ -102,4 +104,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <!-- [Unreleased] compares against the last tagged version. Every version
      heading links to its GitHub release page (created by release.yml); 0.1.0
      has no tag (the first publish was manual), so it links to npm. -->
-[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.5...HEAD
+[Unreleased]: https://github.com/FloezWerk/pi-extension-release-tool/compare/v0.1.6-oidc.1...HEAD
