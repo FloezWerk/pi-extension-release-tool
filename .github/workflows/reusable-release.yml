@@ -127,8 +127,12 @@ jobs:
           TOOLING: ${{ inputs.tooling }}
         run: $TOOLING release-notes --out /tmp/release-notes.md
 
+      # Prereleases (version with "-") are marked as prerelease and never
+      # become the repository's "Latest" release.
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
           files: '*.tgz'
           body_path: /tmp/release-notes.md
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          make_latest: ${{ contains(github.ref_name, '-') && 'false' || 'true' }}
