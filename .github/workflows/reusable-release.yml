@@ -40,10 +40,10 @@ jobs:
       id-token: write   # npm provenance (OIDC)
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: ${{ inputs.node_version }}
 
@@ -130,7 +130,7 @@ jobs:
       # Prereleases (version with "-") are marked as prerelease and never
       # become the repository's "Latest" release.
       - name: Create GitHub release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           files: '*.tgz'
           body_path: /tmp/release-notes.md
