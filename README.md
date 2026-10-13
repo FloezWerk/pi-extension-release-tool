@@ -20,6 +20,7 @@ lives here once.
 - [New extension repository](#new-extension-repository)
 - [Releasing an extension](#releasing-an-extension)
 - [Updating this toolkit](#updating-this-toolkit)
+- [Optional: Gitea as source](docs/gitea.md)
 - [Changelog](#changelog)
 
 ## What is in here
@@ -32,8 +33,8 @@ lives here once.
 - **`template/`** - the skeleton a new extension repository starts from
   (extension stub, README with badges and the changelog block, `CHANGELOG.md`,
   `package.json`, `AGENTS.md`, `LICENSE`, `.gitignore`/`.gitattributes`, thin
-  CI/release callers, and a `.gitea/workflows/` placeholder that keeps Gitea
-  from scheduling the GitHub-only workflows).
+  CI/release callers, and a `.gitea/workflows/` placeholder for the optional
+  Gitea setup, see [Gitea as source](docs/gitea.md)).
 - **`.github/workflows/reusable-*.yml`** - the shared CI and release pipelines.
   Extension repositories call them with `uses: …/reusable-release.yml@v0.1`, so
   a fix here reaches all of them without touching their files.
@@ -94,24 +95,12 @@ After a package update, `/reload` picks up the new version of the template.
 
 ## New extension repository
 
-Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
 `<repo>` below is the repository name, e.g. `piagent-my-ext`.
 
-1. **Gitea: create the repository** (`FloezWerk/<repo>`, no README/license),
-   then **GitHub: create it as well** (empty, public) - the GitHub repository is
-   the mirror target and runs the workflows.
-2. **Gitea: add the push mirror** - *Settings → Repository → Mirror Settings →
-   Add Push Mirror* with the GitHub URL and **"Sync when new commits are
-   pushed"** enabled. Branches *and* tags are mirrored, which is what makes the
-   release flow work: the tag is pushed to Gitea and GitHub Actions reacts on
-   GitHub.
-
-   Gitea must not run the workflows itself (it has no runner): the scaffolded
-   `.gitea/workflows/` directory makes Gitea stop looking for workflows before it
-   reads `.github/workflows`. Keep that placeholder in place, otherwise every
-   push shows up in the Gitea Actions tab as a queued run with
-   "No runner is online to pick up this job."
-3. **Scaffold the repository** (the tooling comes from npm, no clone needed):
+1. **GitHub: create the repository** (empty, public). GitHub runs the CI and
+   release workflows. Working through Gitea first is optional, see
+   [Gitea as source](docs/gitea.md).
+2. **Scaffold the repository** (the tooling comes from npm, no clone needed):
 
    ```bash
    npx -y @floez-werk/pi-extension-release-tool@^0.1 init /srv/projects/<repo> \
@@ -124,15 +113,14 @@ Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
    release-notes block, runs `git init -b main` and creates the initial commit.
    Useful flags: `--ext <file.ts>` (extension file, default `<repo>.ts`),
    `--cmd <name>` (command without slash), `--owner`, `--no-git`.
-4. **Push to Gitea**:
+3. **Push to GitHub**:
 
    ```bash
-   git remote add origin ssh://git@gitea/FloezWerk/<repo>.git
+   git remote add origin git@github.com:FloezWerk/<repo>.git
    git push -u origin main
    ```
 
-   Verify on GitHub that the commit arrived (the mirror reacts on push).
-5. **First npm publish (manual, once per package)**: the package does not exist
+4. **First npm publish (manual, once per package)**: the package does not exist
    on npm yet, so an automation token cannot be scoped to it. Run locally:
 
    ```bash
@@ -144,14 +132,14 @@ Steps 1-2 happen in the browser, 3-4 on the shell, 5-8 once for the repository.
    rejects versions that are already published, so the first tag-driven release
    is the next patch (`v0.1.1`). Keep the `0.1.0` heading link in
    `CHANGELOG.md` pointing at npm.
-6. **npmjs.com: add a Trusted Publisher** (*package → Settings → Trusted
+5. **npmjs.com: add a Trusted Publisher** (*package → Settings → Trusted
    Publisher*): owner and repository of the GitHub repo, workflow filename
    `release.yml`, no environment. No `NPM_TOKEN` secret is needed - permissions
    and the workflow call are already in the scaffolded files. Optional: enable
    "Require two-factor authentication and disallow tokens" for the package.
-7. **Optional, after the first tag-driven release**: point the `[Unreleased]`
+6. **Optional, after the first tag-driven release**: point the `[Unreleased]`
    link in `CHANGELOG.md` at `compare/v0.1.1...HEAD` instead of `commits/main`.
-8. **Verify the pipeline** with the next change: bump the patch version, move
+7. **Verify the pipeline** with the next change: bump the patch version, move
    the `[Unreleased]` bullets into a heading `X.Y.Z - YYYY-MM-DD` (version
    linked to its GitHub release), `npm run readme`, commit, then
 
@@ -181,9 +169,9 @@ The rest is the shared pipeline (see `reusable-release.yml`).
   `npm run readme`, version bump, commit, tag `vX.Y.Z`, push. The release
   workflow then publishes
   to npm and creates the GitHub release.
-- Afterwards move the moving tag **locally**: `npm run tag-major` sets `vX.Y` to
-  this release and pushes it to Gitea, which mirrors it to GitHub. Tags are never
-  created in a workflow, so Gitea stays the single source of truth for refs.
+- Afterwards move the moving tag **locally**: `npm run tag-major` sets `vX.Y`
+  to this release and pushes it to `origin`. Tags are never created in a workflow.
+  With Gitea as source, see [Gitea as source](docs/gitea.md) for the mirror details.
 - Extension repositories pin two refs: the npm package (`@^X.Y` in their
   `package.json` scripts) and the reusable workflows (`@vX.Y` in their
   `ci.yml`/`release.yml`). A patch release reaches them after the tag move; a
