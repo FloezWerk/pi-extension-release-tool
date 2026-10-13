@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.7](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.7) - 2026-10-13
+
 ### Changed
 
 - New extensions are set up for npm trusted publishing: no `NPM_TOKEN` secret, a Trusted Publisher on npmjs.com instead. Existing token setups keep working.
