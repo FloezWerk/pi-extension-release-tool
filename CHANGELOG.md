@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- The release guide explains prereleases: they use the `next` dist-tag and never become `latest` or the GitHub "Latest" release.
+
 ## [0.1.6-oidc.3](https://github.com/FloezWerk/pi-extension-release-tool/releases/tag/v0.1.6-oidc.3) - 2026-10-13
 
 ### Changed

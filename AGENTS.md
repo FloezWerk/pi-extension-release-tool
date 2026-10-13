@@ -72,6 +72,13 @@ string, keep it English. CI fails on umlauts anywhere in the repo.
    `npm publish --access public`), then set the GitHub secret `NPM_TOKEN`, and
    do **not** push the tag of that version
 
+Prereleases (version with `-`, e.g. `0.1.6-oidc.1`):
+- npm dist-tag `next`, `latest` stays on the last stable version
+- GitHub release is marked as prerelease, never "Latest"
+- Stable versions (no `-`) get the npm default `latest`
+- `next` is not moved by stable releases; remove it with
+  `npm dist-tag rm <pkg> next` when the test series is over
+
 ## Repository: local Gitea + public GitHub mirror
 
 - Everything committed here becomes publicly readable on GitHub.
